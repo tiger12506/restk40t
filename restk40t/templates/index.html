@@ -30,8 +30,23 @@
     <body>
         <div class="bg-light" background-color="white">
             <div id="container" class="form-inline">
+<!--
                 <button id="left" type="button" class="btn btn-lg cmd" data-cmd='element delete'>delete</button>
                 <button id="rect" type="button" class="btn btn-lg cmd" data-cmd='rect 0 0 500 500'>rect</button>
+-->
+
+                <button id="left" type="button" class="btn btn-lg cmd" data-cmd='move_relative -39 0'>left</button>
+                <button id="right" type="button" class="btn btn-lg cmd" data-cmd='move_relative 39 0'>right</button>
+                <button id="up" type="button" class="btn btn-lg cmd" data-cmd='move_relative 0 -39'>up</button>
+                <button id="dn" type="button" class="btn btn-lg cmd" data-cmd='move_relative 0 39'>dn</button>
+
+                <button id="lock" type="button" class="btn btn-lg cmd" data-cmd='lock'>lock</button>
+                <button id="unlock" type="button" class="btn btn-lg cmd" data-cmd='unlock'>unlock</button>
+                <button id="trace_hull" type="button" class="btn btn-lg cmd" data-cmd='trace_hull'>trace hull</button>
+                <button id="trace_quick" type="button" class="btn btn-lg cmd" data-cmd='trace_quick'>trace quick</button>
+
+                <button id="pulse" type="button" class="btn btn-lg cmd" data-cmd='pulse 50.000000'>pulse</button>
+                <button id="egv-go" type="button" class="btn btn-lg cmd" data-cmd="egv_import '/home/jacob/cut/output.egv'">Run output.egv</button>
             </div>
         </div>
 
