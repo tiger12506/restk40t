@@ -1,7 +1,8 @@
 from flask import Flask, request, Response
+from werkzeug.serving import make_server
 from jinja2 import Environment, PackageLoader, select_autoescape
-import time
 import threading
+import time
 import queue
 
 class RestK40t(object):
@@ -9,6 +10,9 @@ class RestK40t(object):
         self.work = queue.Queue()
         self.context = None
         self.app = Flask(__name__)
+        self.server = make_server('0.0.0.0', 4000, self.app) 
+        self.ctx = self.app.app_context()
+        self.ctx.push()
         self.quit = False
 
         self.env = Environment(
@@ -20,13 +24,21 @@ class RestK40t(object):
 
 rest = RestK40t()
 
+@rest.app.route("/")
+def console():
+    if ('cmd' in request.args):
+      rest.work.put(request.args['cmd'])
+      return 'OK'
+    return rest.template.render()
+
+
 def plugin(kernel, lifecycle):
     if lifecycle == 'register':
         """
         Register our changes to meerk40t. These should modify the registered values within meerk40t or install different
         modules and modifiers to be used in meerk40t.
         """
-
+        pass
     elif lifecycle == 'boot':
         """
         Do some persistent actions or start modules and modifiers. Register any scheduled tasks or threads that need
@@ -39,18 +51,11 @@ def plugin(kernel, lifecycle):
         during boot. If your thread or work depends on other parts of the system being fully established they should 
         work here.
         """
-        def go():
-            rest.app.run(host='0.0.0.0', port=4000, debug=True, use_reloader=False)
 
         rest.context = kernel.get_context("/")
-        threading.Thread(target=go, daemon=True).start()
 
-        @rest.app.route("/")
-        def console():
-            if ('cmd' in request.args):
-              rest.work.put(request.args['cmd'])
-              return 'OK'
-            return rest.template.render()
+        def run():
+            rest.server.serve_forever()
 
         def do_work():
             while not rest.quit:
@@ -61,7 +66,7 @@ def plugin(kernel, lifecycle):
                     pass
                 time.sleep(0.1)
 
-#        rest.context.threaded(go, thread_name="FlaskWebServer")
+        rest.context.threaded(run, thread_name="FlaskWebServer")
         rest.context.threaded(do_work, thread_name="FlaskHandler")
 
     elif lifecycle == 'mainloop':
@@ -76,3 +81,4 @@ def plugin(kernel, lifecycle):
         any plugin processes should also be stopped so the program can close correctly.
         """
         rest.quit = True
+        rest.server.shutdown()
