@@ -48,7 +48,12 @@
                 <button id="rect" type="button" class="btn btn-lg cmd" data-cmd='rect 0 0 1000 1000'>rect</button>
 
                 <button id="pulse" type="button" class="btn btn-lg cmd" data-cmd='pulse 50.000000'>pulse</button>
-                <button id="egv-go" type="button" class="btn btn-lg cmd" data-cmd="egv_import '/home/jacob/cut/output.egv'">Run output.egv</button>
+                <button id="laseron" type="button" class="btn btn-lg cmd" data-cmd='egv IDS1P'>LASER ON</button>
+                <button id="laseroff" type="button" class="btn btn-lg cmd" data-cmd='egv IUS2P'>off, unlock</button>
+                <button id="laseroffl" type="button" class="btn btn-lg cmd" data-cmd='egv IUS1P'>off, lock</button>
+                <button id="egv-go" type="button" class="btn btn-lg cmd" data-cmd="egv_import /home/jacob/cut/output.egv">Run output.egv</button>
+
+                <button id="estop" type="button" class="btn btn-lg cmd" data-cmd='abort'>estop</button>
             </div>
         </div>
 
