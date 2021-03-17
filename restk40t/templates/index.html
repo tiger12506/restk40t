@@ -23,6 +23,30 @@
                     }
                     e.stopPropagation();
                 });
+
+                var imageNr = 0;
+                var finished = new Array();
+                
+                function createImageLayer() {
+                    var img = new Image();
+                    img.style.position = "absolute";
+                    img.style.zIndex = -1;
+                    img.onload = imageOnload;
+                    img.src = "http://localhost:8080/?action=snapshot&n=" + (++imageNr);
+                    var webcam = $("#webcam");
+                    webcam.insertBefore(img, webcam.firstChild);
+                }
+
+                function imageOnload() {
+                    this.style.zIndex = imageNr;
+                    while (1 < finished.length) {
+                        var del = finished.shift();
+                        del parentNode.removeChild(del);
+                    }
+                    finished.push(this);
+                }
+
+                createImageLayer();
             });
         </script>
     </head>
@@ -30,10 +54,7 @@
     <body>
         <div class="bg-light" background-color="white">
             <div id="container" class="form-inline">
-<!--
-                <button id="left" type="button" class="btn btn-lg cmd" data-cmd='element delete'>delete</button>
-                <button id="rect" type="button" class="btn btn-lg cmd" data-cmd='rect 0 0 500 500'>rect</button>
--->
+                <div id="webcam"><noscript><img src="http://localhost:8080/?action=snapshot" /></noscript></div>
 
                 <button id="left" type="button" class="btn btn-lg cmd" data-cmd='move_relative -39 0'>left</button>
                 <button id="right" type="button" class="btn btn-lg cmd" data-cmd='move_relative 39 0'>right</button>
