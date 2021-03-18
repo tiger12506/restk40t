@@ -1,0 +1,10 @@
+In order to facilitate live dev environment, I followed what happens when you do a:
+python3 setup.py install
+
+It creates an egg file in /usr/local/lib/python3.7/dist-packages.
+I extract that egg, rename all the module-verion-py3.7 crap to just module, and then
+rename EGG-INFO to module.egg-info.
+
+Finally, I remove the installed module directory, and symbolic link to my dev folder.
+I can now skip having to run python3 setup.py install, and can just restart meerk40t
+to reload the updated plugin.

@@ -14,6 +14,8 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
         <script>
+            var cambase = "http://k40:8080";
+            var camurl = cambase + "/?action=snapshot";
             $(document).ready(function() {
                 $("#container").on("click", function(e) {
                     // Handle event once in the parent of all the buttons
@@ -32,8 +34,8 @@
                     img.style.position = "absolute";
                     img.style.zIndex = -1;
                     img.onload = imageOnload;
-                    img.src = "http://localhost:8080/?action=snapshot&n=" + (++imageNr);
-                    var webcam = $("#webcam");
+                    img.src = camurl + "&n=" + (++imageNr);
+                    var webcam = document.getElementById("webcam");
                     webcam.insertBefore(img, webcam.firstChild);
                 }
 
@@ -41,9 +43,10 @@
                     this.style.zIndex = imageNr;
                     while (1 < finished.length) {
                         var del = finished.shift();
-                        del parentNode.removeChild(del);
+                        del.parentNode.removeChild(del);
                     }
                     finished.push(this);
+                    createImageLayer();
                 }
 
                 createImageLayer();
@@ -52,29 +55,33 @@
     </head>
 
     <body>
-        <div class="bg-light" background-color="white">
-            <div id="container" class="form-inline">
-                <div id="webcam"><noscript><img src="http://localhost:8080/?action=snapshot" /></noscript></div>
+        <div class="bg-light" background-color="gray-100">
+            <div id="webcam" width="100%" style="height: 480px;">
+                <noscript><img src="javascript: camurl" /></noscript>
+            </div>
 
-                <button id="left" type="button" class="btn btn-lg cmd" data-cmd='move_relative -39 0'>left</button>
-                <button id="right" type="button" class="btn btn-lg cmd" data-cmd='move_relative 39 0'>right</button>
-                <button id="up" type="button" class="btn btn-lg cmd" data-cmd='move_relative 0 -39'>up</button>
-                <button id="dn" type="button" class="btn btn-lg cmd" data-cmd='move_relative 0 39'>dn</button>
-
+            <div id="container">
+                <button id="left" type="button" class="btn btn-success btn-lg cmd" data-cmd='move_relative -39 0'>left</button>
+                <button id="right" type="button" class="btn btn-success btn-lg cmd" data-cmd='move_relative 39 0'>right</button>
+                <button id="up" type="button" class="btn btn-success btn-lg cmd" data-cmd='move_relative 0 -39'>up</button>
+                <button id="dn" type="button" class="btn btn-success btn-lg cmd" data-cmd='move_relative 0 39'>dn</button>
                 <button id="lock" type="button" class="btn btn-lg cmd" data-cmd='lock'>lock</button>
                 <button id="unlock" type="button" class="btn btn-lg cmd" data-cmd='unlock'>unlock</button>
+<!--
                 <button id="trace_hull" type="button" class="btn btn-lg cmd" data-cmd='trace_hull'>trace hull</button>
                 <button id="trace_quick" type="button" class="btn btn-lg cmd" data-cmd='trace_quick'>trace quick</button>
 
                 <button id="rect" type="button" class="btn btn-lg cmd" data-cmd='rect 0 0 1000 1000'>rect</button>
-
-                <button id="pulse" type="button" class="btn btn-lg cmd" data-cmd='pulse 50.000000'>pulse</button>
+-->
+                <button id="pulse" type="button" class="btn btn-danger btn-lg cmd" data-cmd='pulse 50.000000'>pulse</button>
+<!--
                 <button id="laseron" type="button" class="btn btn-lg cmd" data-cmd='egv IDS1P'>LASER ON</button>
                 <button id="laseroff" type="button" class="btn btn-lg cmd" data-cmd='egv IUS2P'>off, unlock</button>
                 <button id="laseroffl" type="button" class="btn btn-lg cmd" data-cmd='egv IUS1P'>off, lock</button>
-                <button id="egv-go" type="button" class="btn btn-lg cmd" data-cmd="egv_import /home/jacob/cut/output.egv">Run output.egv</button>
+-->
+                <button id="egv-go" type="button" class="btn btn-danger btn-lg cmd" data-cmd="egv_import /home/jacob/cut/output.egv">Run output.egv</button>
 
-                <button id="estop" type="button" class="btn btn-lg cmd" data-cmd='abort'>estop</button>
+                <button id="estop" type="button" class="btn btn-success btn-lg cmd" data-cmd='abort'>estop</button>
             </div>
         </div>
 
