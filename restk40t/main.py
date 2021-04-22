@@ -14,6 +14,7 @@ class RestK40t(object):
         self.ctx = self.app.app_context()
         self.ctx.push()
         self.quit = False
+        self.uris = []
 
         self.env = Environment(
                 loader=PackageLoader('restk40t.main', 'templates'),
@@ -29,8 +30,7 @@ def console():
     if ('cmd' in request.args):
       rest.work.put(request.args['cmd'])
       return 'OK'
-    return rest.template.render()
-
+    return rest.template.render(uri=rest.uris["uri0"])
 
 def plugin(kernel, lifecycle):
     if lifecycle == 'register':
@@ -52,7 +52,13 @@ def plugin(kernel, lifecycle):
         work here.
         """
 
+
+
         rest.context = kernel.get_context("/")
+
+        # Retrieve camera URIs from meerk40t
+        camera_setting = kernel.get_context("camera")
+        rest.uris = camera_setting._kernel.load_persistent_string_dict(camera_setting._path, suffix=True)
 
         def run():
             rest.server.serve_forever()

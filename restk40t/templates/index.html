@@ -14,8 +14,9 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
         <script>
-            var cambase = "http://k40:8080";
-            var camurl = cambase + "/?action=snapshot";
+//            var cambase = "http://k40:8080";
+//            var camurl = cambase + "/?action=snapshot";
+            var camurl = '{{ uri }}';
             $(document).ready(function() {
                 $("#container").on("click", function(e) {
                     // Handle event once in the parent of all the buttons
