@@ -20,7 +20,8 @@
             $(document).ready(function() {
                 $("#container").on("click", function(e) {
                     // Handle event once in the parent of all the buttons
-                    if (e.target !== e.currentTarget) {
+                    if (e.target !== e.currentTarget &&
+                        e.target.classList.contains("cmd")) {
                         var cmd = e.target.dataset.cmd;
                         $.get('/?cmd='+cmd);
                     }
@@ -51,6 +52,13 @@
                 }
 
                 createImageLayer();
+
+                $("#test_burn").on("click", function () {
+                    var raster = $("#raster_speed").val();
+                    var cut = $("#cut_speed").val();
+                    var passes = $("#cut_passes").val();
+                    $.get('/burn?raster='+raster+'&cut='+cut+'&passes='+passes);
+                });
             });
         </script>
     </head>
@@ -80,7 +88,16 @@
                 <button id="laseroff" type="button" class="btn btn-lg cmd" data-cmd='egv IUS2P'>off, unlock</button>
                 <button id="laseroffl" type="button" class="btn btn-lg cmd" data-cmd='egv IUS1P'>off, lock</button>
 -->
-                <button id="egv-go" type="button" class="btn btn-danger btn-lg cmd" data-cmd="egv_import /home/jacob/cut/output.egv">Run output.egv</button>
+                <button id="egv_go" type="button" class="btn btn-danger btn-lg cmd" data-cmd="egv_import /home/jacob/cut/output.egv">Run output.egv</button>
+
+                <input id="should_raster" type="checkbox" value="true">Raster (mm/s)</input>
+                <input id="raster_speed" type="text" value="500" />
+                <label>Cut (mm/s):</label>
+                <input id="cut_speed" type="text" value="20" />
+                <label>Passes:</label>
+                <input id="cut_passes" type="text" value="1" />
+
+                <button id="test_burn" type="button" class="btn btn-danger btn-lg">Test</button>
 
                 <button id="estop" type="button" class="btn btn-success btn-lg cmd" data-cmd='abort'>estop</button>
             </div>

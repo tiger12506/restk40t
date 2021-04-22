@@ -32,6 +32,40 @@ def console():
       return 'OK'
     return rest.template.render(uri=rest.uris["uri0"])
 
+@rest.app.route("/burn")
+def burn():
+    raster = '500'
+    if ('raster' in request.args):
+        raster = request.args['raster']
+    cut = '20'
+    if ('cut' in request.args):
+        cut = request.args['cut']
+    passes = '1'
+    if ('passes' in request.args):
+        passes = request.args['passes']
+
+    rest.work.put("operation* delete")
+    rest.work.put("element* delete")
+    rest.work.put("raster -c #000000 -s {} mm/s -o 50".format(raster))
+    rest.work.put("cut -c #ff0000 -s {} mm/s".format(cut))
+    rest.work.put("rect 0 0 1cm 1cm stroke #ff0000")
+    rest.work.put("rect 0.5mm 0.5mm 9mm 9mm fill #000000")
+    rest.work.put("element* classify")
+
+    rest.work.put("plan clear")
+    rest.work.put("plan copy")
+    rest.work.put("plan preprocess")
+    rest.work.put("plan validate")
+    rest.work.put("plan blob")
+    rest.work.put("plan optimize")
+    rest.work.put("start")
+    rest.work.put("plan spool")
+
+# Maybe these already exist in the plan
+#    rest.work.put("move 0 0")
+#    rest.work.put("unlock")
+    return 'OK'
+
 def plugin(kernel, lifecycle):
     if lifecycle == 'register':
         """
