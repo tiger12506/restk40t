@@ -30,7 +30,11 @@ def console():
     if ('cmd' in request.args):
       rest.work.put(request.args['cmd'])
       return 'OK'
-    return rest.template.render(uri=rest.uris["uri0"])
+
+    uri=''
+    if ("uri0" in rest.uris):
+        uri=rest.uris["uri0"]
+    return rest.template.render(uri=uri)
 
 @rest.app.route("/burn")
 def burn():
