@@ -31,7 +31,7 @@ def console():
       rest.work.put(request.args['cmd'])
       return 'OK'
 
-    uri=''
+    uri='http://k40:8081/?action=snapshot'
     if ("uri0" in rest.uris):
         uri=rest.uris["uri0"]
     return rest.template.render(uri=uri)
@@ -56,14 +56,15 @@ def burn():
     rest.work.put("rect 0.5mm 0.5mm 9mm 9mm fill #000000")
     rest.work.put("element* classify")
 
-    rest.work.put("plan clear")
-    rest.work.put("plan copy")
-    rest.work.put("plan preprocess")
-    rest.work.put("plan validate")
-    rest.work.put("plan blob")
-    rest.work.put("plan optimize")
+    rest.work.put("plan0 clear")
+    rest.work.put("plan0 copy")
+    rest.work.put("plan0 preprocess")
+#    rest.work.put("plan0 validate")
+    rest.work.put("plan0 blob")
+    rest.work.put("plan0 preopt")
+#    rest.work.put("plan0 optimize")
     rest.work.put("start")
-    rest.work.put("plan spool")
+    rest.work.put("plan0 spool")
 
 # Maybe these already exist in the plan
 #    rest.work.put("move 0 0")
