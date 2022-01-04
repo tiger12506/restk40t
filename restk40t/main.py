@@ -10,7 +10,7 @@ class RestK40t(object):
         self.work = queue.Queue()
         self.context = None
         self.app = Flask(__name__)
-        self.server = make_server('0.0.0.0', 4000, self.app) 
+        self.server = None
         self.ctx = self.app.app_context()
         self.ctx.push()
         self.quit = False
@@ -91,13 +91,13 @@ def plugin(kernel, lifecycle):
         work here.
         """
 
-
+        rest.server = make_server('0.0.0.0', 4000, rest.app)
 
         rest.context = kernel.get_context("/")
 
         # Retrieve camera URIs from meerk40t
         camera_setting = kernel.get_context("camera")
-        rest.uris = camera_setting._kernel.load_persistent_string_dict(camera_setting._path, suffix=True)
+        rest.uris = camera_setting._kernel.read_persistent_string_dict(camera_setting._path, suffix=True)
 
         def run():
             rest.server.serve_forever()
@@ -126,4 +126,4 @@ def plugin(kernel, lifecycle):
         any plugin processes should also be stopped so the program can close correctly.
         """
         rest.quit = True
-        rest.server.shutdown()
+        if rest.server: rest.server.shutdown()
